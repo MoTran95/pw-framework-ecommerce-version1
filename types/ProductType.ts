@@ -17,3 +17,16 @@ export type computerType = {
     totalAllProduct: string;
     subTotal: string;
 }
+
+export type computerType2 = {
+    productName: string;
+    processor: string;
+    ram: string;
+    hdd: string;
+    os: string;
+    software: string;
+    productPrice: number;
+    qty: number;
+    total: number;
+    subTotal: number;
+}

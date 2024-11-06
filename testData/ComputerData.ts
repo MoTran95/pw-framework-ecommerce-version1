@@ -37,3 +37,16 @@ export const yourOwnComputer2 = {
     "totalAllProduct": "1445.00",
     "subTotal": "1445.00",
 }; 
+
+export const yourOwnComputer3 = {
+    productName: "Build your own computer",
+    processor: "2.2 GHz Intel Pentium Dual-Core E2200",
+    ram: "4GB",
+    hdd: "400 GB",
+    os: "Windows 10",
+    software: "Acrobat Reader",
+    productPrice: 0,
+    qty: 1,
+    total: 0,
+    subTotal: 0,
+};

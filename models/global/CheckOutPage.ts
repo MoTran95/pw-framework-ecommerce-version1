@@ -1,13 +1,10 @@
-import { expect, Page } from "@playwright/test";
-import ShopingCartPage from "./ShopingCartPage";
-import { AddressDetailInConfirmOrder } from "../../testData/BillingAndShippingData";
-import { getCorrectedStateZipCode, getObjectKeyFromClassName } from "../../utils";
+import { expect } from "@playwright/test";
+import ProductOrderPage from "./ProductOrderPage";
+import BillingAddressComponent from "../components/BillingAddressComponent";
+import ShippingAddressComponent from "../components/ShippingAddressComponent";
+import { AddressDetailInConfirmOrder } from "../../types/BillingShipingPaymentType";
 
-export default class CheckOutPage extends ShopingCartPage {
-
-    constructor(protected page: Page) {
-        super(page);
-    }
+export default class CheckOutPage extends ProductOrderPage {
     private billingAddressLocator = "//li[@id='opc-billing']//div[@class='step-title']";
     private firstNameInputLocator = "//input[@id='BillingNewAddress_FirstName']";
     private lastNameInputLocator = "//input[@id='BillingNewAddress_LastName']";
@@ -31,12 +28,23 @@ export default class CheckOutPage extends ShopingCartPage {
     private confirmBtnLocator = "//input[@onclick='ConfirmOrder.save()']";
     private inStorePickupCheckBoxLocator = "//input[@id='PickUpInStore']";
     private paymentInforLocator = "//p[text()='You will pay by COD']";
-    private billingAdressInformationLocator = "//ul[@class='billing-info']//li";
-    private shippingAdressInformationLocator = "//ul[@class='shipping-info']//li";
     private priceSubTotalLocator = "//span[text()='Sub-Total:']/parent::td/following-sibling::td//span[@class='product-price']";
     private pricePaymentMethodAdditionalFeeLocator = "//span[text()='Payment method additional fee:']/parent::td/following-sibling::td//span[@class='product-price']";
     private priceTotalLocator = "//span[contains(text(),'Total:')]/parent::td/following-sibling::td//span[@class='product-price']";
+    private billingAddressComponent = new BillingAddressComponent(this.page);
+    private shippingAddressComponent = new ShippingAddressComponent(this.page);
 
+    verifyBillingAddressInformation(billingInfor: AddressDetailInConfirmOrder) {
+        return this.billingAddressComponent.verifyBillingAddressInformation(billingInfor);
+    }
+
+    verifyShippingAddressInformation(billingInfor: AddressDetailInConfirmOrder) {
+        return this.shippingAddressComponent.verifyShippingAddressInformation(billingInfor);
+    }
+
+    getShippingAddressInformation(shippingInfor: string[]) {
+        return this.shippingAddressComponent.getShippingAddressInformation(shippingInfor);
+    }
 
     protected getOptionCountryDropdownLocator(option: string) {
         return `//select[@id='BillingNewAddress_CountryId']//option[text()='${option}']`;
@@ -137,49 +145,6 @@ export default class CheckOutPage extends ShopingCartPage {
 
     verifyPaymentInformation() {
         return expect(this.page.locator(this.paymentInforLocator)).toHaveText("You will pay by COD");
-    }
-
-    async verifyBillingAddressInformation(billingInfor: AddressDetailInConfirmOrder) {
-        await this.page.waitForSelector(this.billingAdressInformationLocator);
-        let inforList = await this.page.locator(this.billingAdressInformationLocator).all();
-
-        const actualBillInfo = {};
-        for (const infor of inforList) {
-            let className = await infor.getAttribute("class") || '';
-            let value = await infor.textContent() || '';
-            
-            className = getObjectKeyFromClassName(className);
-            value = getCorrectedStateZipCode(value);
-
-            if (!actualBillInfo[className]) {
-                actualBillInfo[className] = value.trim();
-            }
-        }
-
-        expect(actualBillInfo).toMatchObject(billingInfor);
-    }
-    async verifyShippingAddressInformation(billingInfor: AddressDetailInConfirmOrder) {
-        await this.page.waitForSelector(this.shippingAdressInformationLocator);
-        let inforList = await this.page.locator(this.shippingAdressInformationLocator).all();
-
-        const actualBillInfo = {};
-        for (const infor of inforList) {
-            let className = await infor.getAttribute("class") || '';
-            let value = await infor.textContent() || '';
-            
-            className = getObjectKeyFromClassName(className);
-            value = getCorrectedStateZipCode(value);
-
-            if (!actualBillInfo[className]) {
-                actualBillInfo[className] = value.trim();
-            }
-        }
-
-        expect(actualBillInfo).toMatchObject(billingInfor);
-    }
-
-    getShippingAddressInformation(shippingInfor: string[]) {
-        return expect(this.page.locator(this.shippingAdressInformationLocator)).toHaveText(shippingInfor);
     }
 
     verifyPriceSubTotal(subTotal: string) {

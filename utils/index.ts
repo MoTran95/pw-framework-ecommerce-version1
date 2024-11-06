@@ -1,3 +1,5 @@
+import { Locator } from "@playwright/test";
+
 export function getPriceFromText(labelText: string | null) {
     if(labelText) {
         const match = labelText.match(/\[\+(\d+(\.\d{2})?)\]/);
@@ -21,4 +23,9 @@ export function getObjectKeyFromClassName( className: string) {
 
 export function getCorrectedStateZipCode(stateZipCode: string) {
   return stateZipCode.split(' ').filter(word => word && word).join(" ").replace(',\n', ',');
+}
+
+export async function getTrimmedTextContext(locator: Locator) {
+  const text = await locator.textContent() || '';
+  return text.trim().replace(/\s\s+/g, ' ');
 }

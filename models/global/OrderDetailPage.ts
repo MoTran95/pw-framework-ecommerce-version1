@@ -1,18 +1,31 @@
-import { expect, Page } from "@playwright/test";
-import CheckOutPage from "./CheckOutPage";
+import { expect } from "@playwright/test";
+import ProductOrderPage from "./ProductOrderPage";
+import BillingAddressComponent from "../components/BillingAddressComponent";
+import { AddressDetailInConfirmOrder } from "../../types/BillingShipingPaymentType";
+import ShippingAddressComponent from "../components/ShippingAddressComponent";
 
-export default class OrderDetailPage extends CheckOutPage {
-
-   constructor(protected page: Page) {
-      super(page);
-   }
-   private orderDetailsLocator = "//div[@class='order-details']";
+export default class OrderDetailPage extends ProductOrderPage {
    private orderTotalInOrderOviewLocator = "//div[@class='order-total']//strong";
    protected subTotalAllProductLocator = "//table[@class='cart-total']//span[contains(text(),'Sub-Total:')]/parent::td/following-sibling::td//span";
    protected orderTotalInTotalAllProductLocator = "//table[@class='cart-total']//span[contains(text(),'Order Total:')]/parent::td/following-sibling::td//span";
    protected additionalFeeLocator = "//table[@class='cart-total']//span[contains(text(),'Payment method additional fee:')]/parent::td/following-sibling::td//span";
    protected shippingLocator = "//table[@class='cart-total']//span[contains(text(),'Shipping:')]/parent::td/following-sibling::td//span";
    protected taxLocator = "//table[@class='cart-total']//span[contains(text(),'Tax:')]/parent::td/following-sibling::td//span";
+   private billingAddressComponent = new BillingAddressComponent(this.page);
+   private shippingAddressComponent = new ShippingAddressComponent(this.page);
+
+
+   getBillingAddressComponent() {
+      return this.billingAddressComponent;
+   }
+
+   verifyBillingAddressInformation(billingInfor: AddressDetailInConfirmOrder) {
+      return this.billingAddressComponent.verifyBillingAddressInformation(billingInfor);
+   }
+
+   verifyShippingAddressInformation(billingInfor: AddressDetailInConfirmOrder) {
+      return this.shippingAddressComponent.verifyShippingAddressInformation(billingInfor);
+   }
 
    protected getPriceACartLocator(rowIndex: number) {
       return `(//span[@class='td-title']//ancestor::tr)[${rowIndex}]//span[contains(text(),'Price:')]/parent::td`;

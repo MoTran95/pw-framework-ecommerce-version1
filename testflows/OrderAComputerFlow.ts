@@ -145,6 +145,14 @@ export default class OrderAComputerFlow {
         })
     } 
 
+    async fillBillingAddress(data: billingAddress) {
+        const checkoutPage: CheckOutPage = new CheckOutPage(this.page); 
+        await test.step("Provide information for Billing addresss and go to shipping address step ", async() => {
+            await this.provideInforBillingAddress(data);
+            await checkoutPage.clickContinueBillingAddress();
+        })
+    } 
+
     async provideInforShippingAddressAndGoToShippingMethod(data: ShippingData) {
         const checkoutPage: CheckOutPage = new CheckOutPage(this.page); 
         await test.step("Provide information for shipping address and go to shiping method step", async() => {
@@ -209,7 +217,8 @@ export default class OrderAComputerFlow {
     async verifyOrderDetailCompleted(billingData: AddressDetailInConfirmOrder,shipinggData: AddressDetailInConfirmOrder, computer: computerType, payment:PaymentConfirmOrder, rowIndex: number) {
         const orderDetailPage: OrderDetailPage = new OrderDetailPage(this.page); 
         await test.step("Verify order detail information products after completing an order ", async() => {
-            await orderDetailPage.verifyBillingAddressInformation(billingData);
+            // await orderDetailPage.verifyBillingAddressInformation(billingData);
+            await orderDetailPage.getBillingAddressComponent().verifyBillingAddressInformation(billingData);
             await orderDetailPage.verifyShippingAddressInformation(shipinggData);
             await this.verifyOptionProductInOrderDetailCompletePage(computer, rowIndex);
             await orderDetailPage.verifyShowSubTotalAllProduct(payment.subTotal);

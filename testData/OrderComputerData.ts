@@ -1,5 +1,5 @@
 import { billingDetailAddress, billingInfo, paymentByCast, paymentWith1QtyAndByCash, paymentWith1QtyAndByCash2, shippingData, shippingDetailAddress } from "./BillingAndShippingData";
-import { yourOwnComputer, yourOwnComputer2 } from "./ComputerData";
+import { yourOwnComputer, yourOwnComputer2, yourOwnComputer3 } from "./ComputerData";
 
 export const ORDER_COMPUTER_TEST_DATAS = [
     {
@@ -21,4 +21,11 @@ export const ORDER_COMPUTER_TEST_DATAS = [
         paymentConfirmOrderWith1QtyAndByCash: paymentWith1QtyAndByCash2,
     }
 
+]
+export const ORDER_COMPUTER_TEST_DATAS2 = [
+    {
+        computerData: yourOwnComputer3,
+
+    },
+  
 ]
