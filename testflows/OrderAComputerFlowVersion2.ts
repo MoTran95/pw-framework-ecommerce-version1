@@ -1,16 +1,16 @@
 import { expect, Page, test } from "@playwright/test";
 import BuildOwnComputerPage from "../models/computers/BuildOwnComputerPage";
-import { computerType2 } from "../types/ProductType";
 import ProductListPage from "../models/global/ProductListPage";
 import HomePage from "../models/global/HomePage";
 import ShopingCartPage2 from "../models/global/ShopingCartPage2";
+import { OrderComputerFlowDataType } from "../types";
 
 
 export default class OrderAComputerFlowVersion2 {
 
-    constructor(private page: Page, private productItemData: computerType2) {}
+    constructor(private page: Page, private productItemData: OrderComputerFlowDataType) {}
 
-    async openHomePageAndGoToSpecificProduct(data: computerType2) {
+    async openHomePageAndGoToSpecificProduct(productName: string) {
         const homePage: HomePage = new HomePage(this.page);
         const productListPage: ProductListPage = new ProductListPage(this.page);
         await test.step("Navigate to Desktop page", async () => {
@@ -19,22 +19,24 @@ export default class OrderAComputerFlowVersion2 {
             await productListPage.goToAPageFromCagegoriesBar("Desktops");
         })
         await test.step("Navigate to Build Your Own Computer page", async () => {
-            await productListPage.goToASpecificProductPage(data.productName);
+            await productListPage.goToASpecificProductPage(productName);
         })
     }
 
-    async buildOwnComputerAndAddToCart(data: computerType2) {
+    async buildOwnComputerAndAddToCart() {
         const buildOwnComputerPage: BuildOwnComputerPage = new BuildOwnComputerPage(this.page);
+        const { productItemData } = this;
 
         await test.step("Select options of computer", async () => {
-            this.productItemData.productName = await buildOwnComputerPage.getProductName();
-            this.productItemData.processor = await buildOwnComputerPage.selectProcessor(data.processor);
-            this.productItemData.ram = await buildOwnComputerPage.selectRAM(data.ram);
-            this.productItemData.hdd = await buildOwnComputerPage.selectHDD(data.hdd);
-            this.productItemData.os = await buildOwnComputerPage.selectOS(data.os);
-            this.productItemData.software = await buildOwnComputerPage.selectSoftware(data.software);
+            productItemData.productName = await buildOwnComputerPage.getProductName();
+            productItemData.processor = await buildOwnComputerPage.selectProcessor(productItemData.processor);
+            productItemData.ram = await buildOwnComputerPage.selectRAM(productItemData.ram);
+            productItemData.hdd = await buildOwnComputerPage.selectHDD(productItemData.hdd);
+            productItemData.os = await buildOwnComputerPage.selectOS(productItemData.os);
+            productItemData.software = await buildOwnComputerPage.selectSoftware(productItemData.software);
+            productItemData.productPrice = await buildOwnComputerPage.getProductPrice();
+            
             this.productItemData.qty = await buildOwnComputerPage.getQty();
-            this.productItemData.productPrice = await buildOwnComputerPage.getProductPrice();
             this.productItemData.subTotal = await buildOwnComputerPage.getTotalPrice();
             this.productItemData.total = await buildOwnComputerPage.getTotalPrice();
         })
