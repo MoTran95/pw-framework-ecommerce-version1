@@ -1,5 +1,5 @@
 import { expect } from "@playwright/test";
-import HomePage from "./HomePage";
+import HomePage from "./BasePage";
 
 export default class ProductOrderPage extends HomePage {
     private pageTitleShopingCartLocator = "//div[@class='page-title']//h1[text()= 'Shopping cart']";

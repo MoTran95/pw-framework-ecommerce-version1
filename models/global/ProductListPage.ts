@@ -1,4 +1,4 @@
-import HomePage from "./HomePage";
+import HomePage from "./BasePage";
 
 export default class ProductListPage extends HomePage {
     private pageTiteProductLocator = "//div[@class= 'page-title']";

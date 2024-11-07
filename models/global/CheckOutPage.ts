@@ -1,8 +1,8 @@
 import { expect } from "@playwright/test";
 import ProductOrderPage from "./ProductOrderPage";
-import BillingAddressComponent from "../components/BillingAddressComponent";
-import ShippingAddressComponent from "../components/ShippingAddressComponent";
 import { AddressDetailInConfirmOrder } from "../../types/BillingShipingPaymentType";
+import BillingInfoComponent from "../components/BillingInfoComponent";
+import ShippingInfoComponent from "../components/ShippingInfoComponent";
 
 export default class CheckOutPage extends ProductOrderPage {
     private billingAddressLocator = "//li[@id='opc-billing']//div[@class='step-title']";
@@ -31,8 +31,8 @@ export default class CheckOutPage extends ProductOrderPage {
     private priceSubTotalLocator = "//span[text()='Sub-Total:']/parent::td/following-sibling::td//span[@class='product-price']";
     private pricePaymentMethodAdditionalFeeLocator = "//span[text()='Payment method additional fee:']/parent::td/following-sibling::td//span[@class='product-price']";
     private priceTotalLocator = "//span[contains(text(),'Total:')]/parent::td/following-sibling::td//span[@class='product-price']";
-    private billingAddressComponent = new BillingAddressComponent(this.page);
-    private shippingAddressComponent = new ShippingAddressComponent(this.page);
+    private billingAddressComponent = new BillingInfoComponent(this.page);
+    private shippingAddressComponent = new ShippingInfoComponent(this.page);
 
     verifyBillingAddressInformation(billingInfor: AddressDetailInConfirmOrder) {
         return this.billingAddressComponent.verifyBillingAddressInformation(billingInfor);

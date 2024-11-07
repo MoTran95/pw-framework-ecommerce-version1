@@ -14,18 +14,28 @@ export type OrderComputerFlowDataType = {
     subTotal: number,
     shipping: number,
     tax: number,
+    titleBillingAddress: string,
+    titleShippingMethod: string,
     paymentMethodAdditionalFee: number,
     shippingMethod: string,
     paymentMethod: string,
     paymentInformation: string,    
-    company?: string,
     country: string,
-    stateProvince?: string, // Optional field for non-US entries
     city: string,
     address1: string,
-    address2: string,
     zipOrPostalCode: string,
     cityStateZip: string,
     phoneNumber: string,
+    address2?: string,
+    stateProvince?: string, // Optional field for non-US entries
+    company?: string,
     faxNumber?: string // Optional field
+}
+
+export type CartPriceDataType = {
+    total: number,
+    subTotal: number,
+    shipping: number,
+    tax: number,
+    paymentMethodAdditionalFee?: number,
 }

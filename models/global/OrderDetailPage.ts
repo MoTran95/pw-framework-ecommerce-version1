@@ -1,8 +1,9 @@
 import { expect } from "@playwright/test";
 import ProductOrderPage from "./ProductOrderPage";
-import BillingAddressComponent from "../components/BillingAddressComponent";
 import { AddressDetailInConfirmOrder } from "../../types/BillingShipingPaymentType";
-import ShippingAddressComponent from "../components/ShippingAddressComponent";
+import BillingInfoComponent from "../components/BillingInfoComponent";
+import ShippingInfoComponent from "../components/ShippingInfoComponent";
+
 
 export default class OrderDetailPage extends ProductOrderPage {
    private orderTotalInOrderOviewLocator = "//div[@class='order-total']//strong";
@@ -11,8 +12,8 @@ export default class OrderDetailPage extends ProductOrderPage {
    protected additionalFeeLocator = "//table[@class='cart-total']//span[contains(text(),'Payment method additional fee:')]/parent::td/following-sibling::td//span";
    protected shippingLocator = "//table[@class='cart-total']//span[contains(text(),'Shipping:')]/parent::td/following-sibling::td//span";
    protected taxLocator = "//table[@class='cart-total']//span[contains(text(),'Tax:')]/parent::td/following-sibling::td//span";
-   private billingAddressComponent = new BillingAddressComponent(this.page);
-   private shippingAddressComponent = new ShippingAddressComponent(this.page);
+   private billingAddressComponent = new BillingInfoComponent(this.page);
+   private shippingAddressComponent = new ShippingInfoComponent(this.page);
 
 
    getBillingAddressComponent() {

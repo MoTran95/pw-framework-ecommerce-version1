@@ -9,5 +9,9 @@ test(`Test build your computer when ordering 1 type product: CPU ${processor}, R
   await orderComputerFlow.openHomePageAndGoToSpecificProduct(productName);
   await orderComputerFlow.buildOwnComputerAndAddToCart();
   await orderComputerFlow.verifyShoppingCart();
+  await orderComputerFlow.checkoutAsAGuest();
+  await orderComputerFlow.verifyCheckout();
+  await orderComputerFlow.verifyOrderCompletedAndGotoOrderDetail();
+  await orderComputerFlow.verifyOrderDetailPage();
 });
 

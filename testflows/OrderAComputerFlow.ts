@@ -1,7 +1,7 @@
 import { Page, test } from "@playwright/test";
 import BuildOwnComputerPage from "../models/computers/BuildOwnComputerPage";
 import ShopingCartPage from "../models/global/ShopingCartPage";
-import HomePage from "../models/global/HomePage";
+import HomePage from "../models/global/BasePage";
 import ProductListPage from "../models/global/ProductListPage";
 import LoginPage from "../models/global/LoginPage";
 import CheckOutPage from "../models/global/CheckOutPage";
