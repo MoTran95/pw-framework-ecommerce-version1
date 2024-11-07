@@ -1,7 +1,7 @@
 import { expect, Page } from "@playwright/test";
-import HomePage from "./BasePage";
+import BasePage from "./BasePage";
 
-export default class LoginPage extends HomePage {
+export default class LoginPage extends BasePage {
 
     constructor(protected page: Page) {
         super(page);

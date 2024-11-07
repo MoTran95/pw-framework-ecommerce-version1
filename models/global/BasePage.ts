@@ -1,6 +1,6 @@
 import { expect, Page } from "@playwright/test";
 
-export default class HomePage {
+export default class BasePage {
 
     constructor(protected page: Page) {
         this.page = page;

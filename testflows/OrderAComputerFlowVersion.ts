@@ -1,7 +1,7 @@
 import { expect, Page, test } from "@playwright/test";
 import BuildOwnComputerPage from "../models/computers/BuildOwnComputerPage";
 import ProductListPage from "../models/global/ProductListPage";
-import HomePage from "../models/global/BasePage";
+import BasePage from "../models/global/BasePage";
 import ShopingCartPage from "../models/global/ShopingCartPage";
 import { OrderComputerFlowDataType } from "../types";
 import LoginPage from "../models/global/LoginPage";
@@ -21,7 +21,7 @@ export default class OrderAComputerFlowVersion {
         this.shippingInfo = [productItemData.titleShippingMethod, productItemData.shippingMethod];
     }
     async openHomePageAndGoToSpecificProduct(productName: string) {
-        const homePage: HomePage = new HomePage(this.page);
+        const homePage: BasePage = new BasePage(this.page);
         const productListPage: ProductListPage = new ProductListPage(this.page);
         await test.step("Navigate to Desktop page", async () => {
             await this.page.goto(" ");
@@ -154,7 +154,7 @@ export default class OrderAComputerFlowVersion {
             expect(this.shippingInfo).toEqual(text);
         });
     }
-    
+
     async verifyProductInfoAndConfirmOrder () {
         const checkoutPage = new CheckOutPage(this.page);
         await test.step("Verify product info and go to order complete page", async () => {

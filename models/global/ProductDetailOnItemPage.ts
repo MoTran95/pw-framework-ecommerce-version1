@@ -1,6 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test';
 import { getPriceFromText } from '../../utils';
-import HomePage from './BasePage';
+import BasePage from './BasePage';
 import ProductListPage from './ProductListPage';
 
 export default class ProductDetailOnItemPage extends ProductListPage {

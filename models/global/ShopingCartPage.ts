@@ -1,9 +1,9 @@
 import { computerType } from "../../types/ProductType";
 import CartItemRowComponent from "../components/shoppingCarts/CartItemRowComponent";
 import CartTotalComponent from "../components/shoppingCarts/CartTotalComponent";
-import HomePage from "./BasePage";
+import BasePage from "./BasePage";
 
-export default class ShopingCartPage extends HomePage {
+export default class ShopingCartPage extends BasePage {
     private conditionCheckboxLocator = "//input[@id='termsofservice']";
     private checkoutBtnLocator = "//button[@id='checkout']";
     
