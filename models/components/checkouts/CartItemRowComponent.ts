@@ -1,25 +1,26 @@
 import { Locator } from "@playwright/test";
-import { getTrimmedTextContext } from "../../utils";
+import { getTrimmedTextContext } from "../../../utils";
+import { computerType } from "../../../types/ProductType";
 
-export default class CartItemRowInShoppingCartComponent {
+export default class CartItemRowComponent {
    static SELECTOR = '.cart-item-row';
    private productSel = ".product-name";
    private attributeSel = '.attributes';
    private unitPriceSel = '.product-unit-price';
-   private quantityInputSel = '.qty-input';
+   private quantitySel = '.qty.nobr > span';
    private subTotalSel = '.product-subtotal';
 
    constructor(private component: Locator) { }
 
    async getProductData() {
+      await this.component.waitFor({ state: "visible" });
       const data: any = {};
 
       data.productName = await getTrimmedTextContext(this.component.locator(this.productSel));
       data.productPrice = Number(await getTrimmedTextContext(this.component.locator(this.unitPriceSel)));
-      data.qty = Number(await this.component.locator(this.quantityInputSel).inputValue());
+      data.qty = Number(await getTrimmedTextContext(this.component.locator(this.quantitySel).nth(1)));
       data.subTotal = Number(await getTrimmedTextContext(this.component.locator(this.subTotalSel)));
       const attributes = await this.component.locator(this.attributeSel).innerHTML();
-
 
       attributes
          .split('<br>')
@@ -27,6 +28,18 @@ export default class CartItemRowInShoppingCartComponent {
          .forEach((item) => {
             data[item[0].trim().toLowerCase()] = item[1].trim();
          });
+
+      return data;
+  }
+
+   async getAllProductCartData() {
+      const data: computerType[] = [];
+      await this.component.waitFor({ state: "visible" });
+      const cartItemRowLocators = await this.component.locator(CartItemRowComponent.SELECTOR).all();
+      for (const cartItemRowLocator of cartItemRowLocators) {
+         const itemData = await this.getProductData();
+         data.push(itemData);
+      }
 
       return data;
    }

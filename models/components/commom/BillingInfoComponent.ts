@@ -1,7 +1,7 @@
 import { Locator } from "@playwright/test";
-import { getTrimmedTextContext } from "../../utils";
+import { getTrimmedTextContext } from "../../../utils";
 
-export default class BillingInfoComponent2 {
+export default class BillingInfoComponent {
     static SELECTOR = ".billing-info";
     private billingInfo = "li";
     constructor(private component: Locator) {}

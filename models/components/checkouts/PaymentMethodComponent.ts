@@ -1,5 +1,7 @@
-import { getTrimmedTextContext } from "../../utils";
+import { Locator } from "@playwright/test";
 import CheckoutPageComponent from "./CheckoutPageComponent";
+import { getTrimmedTextContext } from "../../../utils";
+
 
 export default class PaymentMethodComponents extends CheckoutPageComponent {
 
@@ -19,3 +21,4 @@ export default class PaymentMethodComponents extends CheckoutPageComponent {
         }
     }
 }
+

@@ -1,7 +1,7 @@
 import { Locator } from "@playwright/test";
-import { getTrimmedTextContext } from "../../utils";
+import { getTrimmedTextContext } from "../../../utils";
 
-export default class ShippingInfoComponent2 {
+export default class ShippingInfoComponent {
     static SELECTOR = ".shipping-info"
     private shippingInfo = "li";
 

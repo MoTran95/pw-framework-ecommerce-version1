@@ -1,7 +1,5 @@
 import { Locator } from "@playwright/test";
-import { getCartPriceData, getTrimmedTextContext } from "../../utils";
-import { CartPriceDataType } from "../../types";
-
+import { getCartPriceData, getTrimmedTextContext } from "../../../utils";
 export default class CartTotalComponent {
 
     static SELECTOR = ".cart-total";

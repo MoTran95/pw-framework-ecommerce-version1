@@ -1,79 +1,36 @@
-import { expect } from "@playwright/test";
-import ProductOrderPage from "./ProductOrderPage";
-import { AddressDetailInConfirmOrder } from "../../types/BillingShipingPaymentType";
-import BillingInfoComponent from "../components/BillingInfoComponent";
-import ShippingInfoComponent from "../components/ShippingInfoComponent";
+import { Page } from "@playwright/test";
+import BillingInfoComponent from "../components/commom/BillingInfoComponent";
+import ShippingInfoComponent from "../components/commom/ShippingInfoComponent";
+import CartItemAllComponent from "../components/checkouts/CartItemAllComponent ";
+import CartItemRowComponent from "../components/checkouts/CartItemRowComponent";
+import CartTotalComponent from "../components/shoppingCarts/CartTotalComponent";
 
+export default class OrderDetailPage {
+   private reOrderSel = ".button-1";
 
-export default class OrderDetailPage extends ProductOrderPage {
-   private orderTotalInOrderOviewLocator = "//div[@class='order-total']//strong";
-   protected subTotalAllProductLocator = "//table[@class='cart-total']//span[contains(text(),'Sub-Total:')]/parent::td/following-sibling::td//span";
-   protected orderTotalInTotalAllProductLocator = "//table[@class='cart-total']//span[contains(text(),'Order Total:')]/parent::td/following-sibling::td//span";
-   protected additionalFeeLocator = "//table[@class='cart-total']//span[contains(text(),'Payment method additional fee:')]/parent::td/following-sibling::td//span";
-   protected shippingLocator = "//table[@class='cart-total']//span[contains(text(),'Shipping:')]/parent::td/following-sibling::td//span";
-   protected taxLocator = "//table[@class='cart-total']//span[contains(text(),'Tax:')]/parent::td/following-sibling::td//span";
-   private billingAddressComponent = new BillingInfoComponent(this.page);
-   private shippingAddressComponent = new ShippingInfoComponent(this.page);
+   constructor(private page: Page){}
 
-
-   getBillingAddressComponent() {
-      return this.billingAddressComponent;
+   async getBillingInfoData () {
+       return new BillingInfoComponent(this.page.locator(BillingInfoComponent.SELECTOR)).getBillingInfoData();
    }
 
-   verifyBillingAddressInformation(billingInfor: AddressDetailInConfirmOrder) {
-      return this.billingAddressComponent.verifyBillingAddressInformation(billingInfor);
+   async getShippingInfoData () {
+       return new ShippingInfoComponent(this.page.locator(ShippingInfoComponent.SELECTOR)).getShippingInfoData();
    }
 
-   verifyShippingAddressInformation(billingInfor: AddressDetailInConfirmOrder) {
-      return this.shippingAddressComponent.verifyShippingAddressInformation(billingInfor);
+   async getAllProductCartData() {
+       return new CartItemAllComponent(this.page.locator(CartItemAllComponent.SELECTOR)).getAllProductCartData();
    }
 
-   protected getPriceACartLocator(rowIndex: number) {
-      return `(//span[@class='td-title']//ancestor::tr)[${rowIndex}]//span[contains(text(),'Price:')]/parent::td`;
+   async getProductCartData() {
+       return new CartItemRowComponent(this.page.locator(CartItemRowComponent.SELECTOR)).getProductData();
    }
 
-   protected getTotalACartLocator(rowIndex: number) {
-      return `(//span[@class='td-title']//ancestor::tr)[${rowIndex}]//span[contains(text(),'Total:')]/parent::td`;
+   async getCartTotalData () {
+       return new CartTotalComponent(this.page.locator(CartTotalComponent.SELECTOR)).getPrices();
    }
-
-   protected getProductNameLocator(name: string, rowIndex: number) {
-      return `(//td[@class='a-left name']/parent::tr)[${rowIndex}]//a[text()='${name}']`;
-   }
-
-   verifyShowSubTotalAllProduct(price: string) {
-      return expect(this.page.locator(this.subTotalAllProductLocator)).toHaveText(price);
-   }
-
-   verifyShowToOrderTotalAllProductInTotal(price: string) {
-      return expect(this.page.locator(this.orderTotalInTotalAllProductLocator)).toHaveText(price);
-   }
-
-   verifyShowToOrderTotalInOrderView(price: string) {
-      return expect(this.page.locator(this.orderTotalInOrderOviewLocator)).toHaveText(price);
-   }
-
-   verifyPaymentAdditionalFee(price: string) {
-      return expect(this.page.locator(this.additionalFeeLocator)).toHaveText(price);
-   }
-
-   verifyTax(price: string) {
-      return expect(this.page.locator(this.taxLocator)).toHaveText(price);
-   }
-
-   verifyShipping(price: string) {
-      return expect(this.page.locator(this.shippingLocator)).toHaveText(price);
-   }
-
-   verifyShowPriceACart(rowIndex: number, price: string) {
-      return expect(this.page.locator(this.getPriceACartLocator(rowIndex))).toContainText(price);
-   }
-
-   verifyShowTotalACart(rowIndex: number, price: string) {
-      return expect(this.page.locator(this.getTotalACartLocator(rowIndex))).toContainText(price);
-   }
-
-   verifyProductName(productName: string, rowIndex: number) {
-      return expect(this.page.locator(this.getProductNameLocator(productName, rowIndex))).toHaveText(productName);
-   }
-
+   
+   reOrder() {
+      return this.page.locator(this.reOrderSel).click();
+  }
 }

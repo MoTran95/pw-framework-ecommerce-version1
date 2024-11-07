@@ -2,16 +2,15 @@ import { expect, Page, test } from "@playwright/test";
 import BuildOwnComputerPage from "../models/computers/BuildOwnComputerPage";
 import ProductListPage from "../models/global/ProductListPage";
 import HomePage from "../models/global/BasePage";
-import ShopingCartPage2 from "../models/global/ShopingCartPage2";
+import ShopingCartPage from "../models/global/ShopingCartPage";
 import { OrderComputerFlowDataType } from "../types";
 import LoginPage from "../models/global/LoginPage";
-import CheckOutPage2 from "../models/global/CheckOutPage2";
-import { compileFunction } from "vm";
+import CheckOutPage from "../models/global/CheckOutPage";
 import OrderCompletePage from "../models/global/OrderCompletePage";
-import OrderDetailPage2 from "../models/global/OrderDetailPage2";
+import OrderDetailPage from "../models/global/OrderDetailPage";
 
 
-export default class OrderAComputerFlowVersion2 {
+export default class OrderAComputerFlowVersion {
     billingInfo: string[];
     shippingInfo: string [];
     constructor(private page: Page, private productItemData: OrderComputerFlowDataType) {
@@ -58,7 +57,7 @@ export default class OrderAComputerFlowVersion2 {
         })
     }
     async verifyShoppingCart() {
-        const shopingCartPage = new ShopingCartPage2(this.page);
+        const shopingCartPage = new ShopingCartPage(this.page);
 
         await test.step("Verify product information", async () => {
             const itemDatas = await shopingCartPage.getAllProductCartData();
@@ -69,10 +68,15 @@ export default class OrderAComputerFlowVersion2 {
             expect(priceDatas.total).toEqual(priceDatas.subTotal + priceDatas.shipping + priceDatas.tax);
         });
 
+       
+    }
+
+    async agreeConditionAndGotoCheckout() {
+        const shopingCartPage = new ShopingCartPage(this.page);
         await test.step("Go to checkout page", async () => {
             await shopingCartPage.checkConditionCheckbox();
             await shopingCartPage.checkOut();
-        })
+        });
     }
 
     async checkoutAsAGuest() {
@@ -81,8 +85,9 @@ export default class OrderAComputerFlowVersion2 {
             await loginPage.checkoutAsGuest();
         });
     }
-    async verifyCheckout() {
-        const checkoutPage = new CheckOutPage2(this.page);
+
+    async inputBillingAddress () {
+        const checkoutPage = new CheckOutPage(this.page);
         await test.step("Input billing address", async () => {
             const billingAddressComponent = checkoutPage.getBillingAddressComponent();
             await billingAddressComponent.enterFirstName(this.productItemData.firstName);
@@ -99,38 +104,59 @@ export default class OrderAComputerFlowVersion2 {
             await billingAddressComponent.selectState(this.productItemData.stateProvince);
             await billingAddressComponent.continue();
         });
+    }
 
-        await test.step("Input shipping address", async () => {
-            const shippingAddressComponent = checkoutPage.getShippingAddressComponent();
-            await shippingAddressComponent.checkInStorePickup();
-            expect(shippingAddressComponent.isSelectAddressDropdown()).toBeTruthy();
-            await shippingAddressComponent.continue();
+    async inputShippingAddress () {
+        const checkoutPage = new CheckOutPage(this.page);
+        await test.step("Input billing address", async () => {
+            await test.step("Input shipping address", async () => {
+                const shippingAddressComponent = checkoutPage.getShippingAddressComponent();
+                await shippingAddressComponent.checkInStorePickup();
+                expect(shippingAddressComponent.isSelectAddressDropdown()).toBeTruthy();
+                await shippingAddressComponent.continue();
+            });
+    
         });
+    }
 
+    async selectPaymentMethod () {
+        const checkoutPage = new CheckOutPage(this.page);
         await test.step("select payment method", async () => {
             const paymentMethodComponent = checkoutPage.getPaymentMethodComponent();
             await paymentMethodComponent.selectPaymentMethod(this.productItemData.paymentMethod);
             await paymentMethodComponent.continue();
         });
+    }
 
+    async selectPaymentInfo () {
+        const checkoutPage = new CheckOutPage(this.page);
         await test.step("Verify payment info", async () => {
             const paymentInfoComponent = checkoutPage.getPaymentInfoComponent();
             expect(await paymentInfoComponent.getTextPaymentInfoByCOD()).toEqual(this.productItemData.paymentInformation);
             await paymentInfoComponent.continue();
         });
+    }
 
+    async verifyBillingInfo () {
+        const checkoutPage = new CheckOutPage(this.page);
         await test.step("Verify billing info", async () => {
             const confirmOrderComponent = checkoutPage.getConfirmOrderComponent();
             const text = await confirmOrderComponent.getBillingInfoData();
             expect(this.billingInfo).toEqual(text);
         });
+    }
 
+    async verifyShippingInfo () {
+        const checkoutPage = new CheckOutPage(this.page);
         await test.step("Verify shipping info", async () => {
             const confirmOrderComponent = checkoutPage.getConfirmOrderComponent();
             const text = await confirmOrderComponent.getShippingInfoData();
             expect(this.shippingInfo).toEqual(text);
         });
-
+    }
+    
+    async verifyProductInfoAndConfirmOrder () {
+        const checkoutPage = new CheckOutPage(this.page);
         await test.step("Verify product info and go to order complete page", async () => {
             const confirmOrderComponent = checkoutPage.getConfirmOrderComponent();
             const item = await confirmOrderComponent.getAllProductCartData();
@@ -141,7 +167,6 @@ export default class OrderAComputerFlowVersion2 {
             expect(priceDatas.total).toEqual(priceDatas.subTotal + priceDatas.shipping + priceDatas.tax + (priceDatas.paymentMethodAdditionalFee || 0));
             await confirmOrderComponent.continue();
         });
-        
     }
 
     async verifyOrderCompletedAndGotoOrderDetail() {
@@ -155,7 +180,7 @@ export default class OrderAComputerFlowVersion2 {
     }
 
     async verifyOrderDetailPage() {
-        const orderDetailPage = new OrderDetailPage2(this.page); 
+        const orderDetailPage = new OrderDetailPage(this.page); 
         await test.step("Verify billing info", async () => {
             const text = await orderDetailPage.getBillingInfoData();
             expect(this.billingInfo).toEqual(text);

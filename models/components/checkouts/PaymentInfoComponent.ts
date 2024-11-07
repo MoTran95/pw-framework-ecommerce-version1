@@ -1,5 +1,6 @@
-import { getTrimmedTextContext } from "../../utils";
+import { Locator } from "@playwright/test";
 import CheckoutPageComponent from "./CheckoutPageComponent";
+import { getTrimmedTextContext } from "../../../utils";
 
 export default class PaymentInfoComponent extends CheckoutPageComponent {
     static SELECTOR = "#checkout-step-payment-info"; 
